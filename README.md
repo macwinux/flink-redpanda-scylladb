@@ -2,7 +2,14 @@
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/lukashass/flink-devcontainer)
 
-## Requirements
+## Usage
+
+This template repository can be used two ways:
+
+1. Using Gitpod (just click the open in Gitpod badge above)
+1. Using a VSCode devcontainer
+
+### Requirements for VSCode devcontainer
 
 - Docker
 - VSCode
