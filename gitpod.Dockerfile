@@ -1,6 +1,6 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/java-8/.devcontainer/base.Dockerfile
 
-FROM mcr.microsoft.com/vscode/devcontainers/java:0-8
+FROM gitpod/workspace-full
 
 # [Option] Install Maven
 ARG INSTALL_MAVEN="true"
