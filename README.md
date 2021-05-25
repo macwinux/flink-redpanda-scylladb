@@ -1,5 +1,11 @@
 # Flink devcontainer
 
+## Requirements
+
+- Docker
+- VSCode
+- <https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers>
+
 ## Build
 
 ```bash
