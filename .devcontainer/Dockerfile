@@ -24,5 +24,5 @@ RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/l
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
 
 # install flink
-RUN wget -qO- https://mirror.netcologne.de/apache.org/flink/flink-1.13.0/flink-1.13.0-bin-scala_2.11.tgz | tar -xzf -
+RUN wget -qO- https://archive.apache.org/dist/flink/flink-1.13.0/flink-1.13.0-bin-scala_2.11.tgz | tar -xzf -
 ENV PATH "$PATH:/flink-1.13.0/bin"
