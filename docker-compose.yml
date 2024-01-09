@@ -1,0 +1,97 @@
+version: '3.3'
+name: flink-local
+services:
+  #flink-service:
+  #  build:
+  #    context: ./flink
+  #    dockerfile: Dockerfile
+  #    args:
+  #      INSTALL_MAVEN: true,
+  #      INSTALL_GRADLE: false,
+  #      INSTALL_NODE: false,
+  #      NODE_VERSION: lts/*
+  #  #volumes:
+  #  #  - ..:/workspaces/flink-redpanda-scylladb:cached
+  #  ports:
+  #    - 9091:8081
+  scylla:
+    container_name: scylla
+    image: scylladb/scylla:5.1.0
+    restart: always
+    command: --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    ports:
+      - 9042:9042
+  redpanda:
+    container_name: redpanda
+    image: docker.redpanda.com/vectorized/redpanda:v23.1.2
+    command:
+      - redpanda start
+      - --smp 1
+      - --overprovisioned
+      - --node-id 0
+      - --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+      - --advertise-kafka-addr PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
+      - --pandaproxy-addr 0.0.0.0:8082
+      - --advertise-pandaproxy-addr localhost:8082
+    ports:
+      - 8081:8081
+      - 8082:8082
+      - 9092:9092
+      - 9644:9644
+      - 29092:29092
+  console:
+    container_name: console
+    image: docker.redpanda.com/vectorized/console:latest
+    entrypoint: /bin/sh
+    command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda:29092"]
+          schemaRegistry:
+            enabled: true
+            urls: ["http://redpanda:8081"]
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://redpanda:9644"]
+        connect:
+          enabled: true
+          clusters:
+            - name: local-connect-cluster
+              url: http://connect:8083
+    ports:
+      - 8080:8080
+    depends_on:
+      - redpanda
+
+
+
+#  scylla-node1:
+#    container_name: scylla-node1
+#    image: scylladb/scylla:5.1.0
+#    restart: always
+#    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+#    volumes:
+#      - "./scylla/scylla.yaml:/etc/scylla/scylla.yaml"
+#      - "./scylla/cassandra-rackdc.properties.dc1:/etc/scylla/cassandra-rackdc.properties"
+#      - "./scylla/mutant-data.txt:/mutant-data.txt"
+#
+#  scylla-node2:
+#    container_name: scylla-node2
+#    image: scylladb/scylla:5.1.0
+#    restart: always
+#    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+#    volumes:
+#      - "./scylla/scylla.yaml:/etc/scylla/scylla.yaml"
+#      - "./scylla/cassandra-rackdc.properties.dc1:/etc/scylla/cassandra-rackdc.properties"
+#
+#  scylla-node3:
+#    container_name: scylla-node3
+#    image: scylladb/scylla:5.1.0
+#    restart: always
+#    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+#    volumes:
+#      - "./scylla/scylla.yaml:/etc/scylla/scylla.yaml"
+#      - "./scylla/cassandra-rackdc.properties.dc1:/etc/scylla/cassandra-rackdc.properties"

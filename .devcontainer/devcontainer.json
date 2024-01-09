@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/java-8
 {
-	"name": "Java 8",
+	"name": "flink-scylladb-redpanda",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
@@ -11,8 +11,9 @@
 			"NODE_VERSION": "lts/*"
 		}
 	},
-
-	// Set *default* container specific settings.json values on container create.
+	//"dockerComposeFile": "docker-compose.yml",
+	//"service": "flink-service",
+	//"workspaceFolder": "/workspaces/flink-redpanda-scylladb",
 	"settings": { 
 		"terminal.integrated.shell.linux": "/bin/bash",
 		"java.home": "/docker-java-home",
@@ -29,10 +30,11 @@
 		"vscjava.vscode-java-pack",
 		"redhat.vscode-xml"
 	],
-
+	"runArgs": [
+		"--network=flink-local_default"
+	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [8081],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
 

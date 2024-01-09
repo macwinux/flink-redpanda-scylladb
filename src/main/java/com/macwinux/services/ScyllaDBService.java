@@ -3,6 +3,8 @@ package com.macwinux.services;
 import com.datastax.driver.mapping.Mapper;
 import com.macwinux.Main;
 import model.Car;
+
+
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -33,7 +35,7 @@ public final class ScyllaDBService {
 
         LOGGER.info("Open ScyllaDB connection and Sinking car data into ScyllaDB.");
         CassandraSink.addSink(sinkCarDataStream)
-                .setHost("127.0.0.1")
+                .setHost("scylla",9042)
                 .setQuery("INSERT INTO example.car(Name, Cylinders, Horsepower) values (?, ?, ?);")
                 .setMapperOptions(() -> new Mapper.Option[]{Mapper.Option.saveNullFields(true)})
                 .build();
